@@ -80,7 +80,6 @@ export interface SimpleAlertPayload {
   body?: string;
   priority?: 'critical' | 'high' | 'medium' | 'low' | 'info';
   severity?: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  workspace?: string;
   timestamp?: string;
   [key: string]: any;
 }
@@ -95,7 +94,7 @@ export interface SimpleA11opsInstance {
   warning(payload: SimpleAlertPayload): Promise<any>;
   info(title: string, message?: string): Promise<any>;
   info(payload: SimpleAlertPayload): Promise<any>;
-  configure(options: { apiKey?: string; workspace?: string }): SimpleA11opsInstance;
+  configure(options: { apiKey?: string }): SimpleA11opsInstance;
 }
 
 // Export the simple API instance

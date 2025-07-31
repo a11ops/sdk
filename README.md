@@ -111,8 +111,7 @@ import { a11ops } from "@a11ops/sdk";
 
 // Configure once in your app initialization
 a11ops.configure({
-  apiKey: "your-api-key", // Optional if set via env
-  workspace: "production", // Default workspace
+  apiKey: "your-api-key" // Optional if set via env
 });
 ```
 

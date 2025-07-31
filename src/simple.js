@@ -6,7 +6,6 @@ const os = require('os');
 class SimpleA11ops {
   constructor() {
     this.apiKey = null;
-    this.workspaceKey = null;
     this.baseUrl = process.env.A11OPS_API_URL || 'https://api.a11ops.com';
     this.configPath = path.join(os.homedir(), '.a11ops', 'config.json');
     
@@ -35,14 +34,13 @@ class SimpleA11ops {
       if (fs.existsSync(this.configPath)) {
         const config = JSON.parse(fs.readFileSync(this.configPath, 'utf-8'));
         this.apiKey = config.apiKey;
-        this.workspaceKey = config.defaultWorkspace;
       }
     } catch (error) {
       // Config not found or invalid, will prompt on first use
     }
   }
 
-  _saveConfig(apiKey, workspaceKey) {
+  _saveConfig(apiKey) {
     const configDir = path.dirname(this.configPath);
     
     // Create directory if it doesn't exist
@@ -53,7 +51,6 @@ class SimpleA11ops {
     // Save configuration
     fs.writeFileSync(this.configPath, JSON.stringify({
       apiKey,
-      defaultWorkspace: workspaceKey,
       createdAt: new Date().toISOString()
     }, null, 2));
   }
@@ -81,23 +78,20 @@ class SimpleA11ops {
     
     return new Promise((resolve, reject) => {
       readline.question('Enter your API key: ', (apiKey) => {
-        readline.question('Enter your default workspace key (optional): ', (workspaceKey) => {
-          readline.close();
-          
-          if (!apiKey) {
-            reject(new Error('API key is required'));
-            return;
-          }
-          
-          this.apiKey = apiKey.trim();
-          this.workspaceKey = workspaceKey?.trim() || null;
-          
-          // Save for future use
-          this._saveConfig(this.apiKey, this.workspaceKey);
-          
-          console.log('\n✅ Configuration saved! You\'re all set.\n');
-          resolve();
-        });
+        readline.close();
+        
+        if (!apiKey) {
+          reject(new Error('API key is required'));
+          return;
+        }
+        
+        this.apiKey = apiKey.trim();
+        
+        // Save for future use
+        this._saveConfig(this.apiKey);
+        
+        console.log('\n✅ Configuration saved! You\'re all set.\n');
+        resolve();
       });
     });
   }
@@ -115,22 +109,19 @@ class SimpleA11ops {
       payload.severity = payload.priority;
     }
 
-    // Use workspace from payload or default
-    const workspace = payload.workspace || this.workspaceKey;
-    
     // Prepare the alert payload
     const alertPayload = {
       title: payload.title || 'Alert',
       message: payload.message || payload.body || '',
       severity: payload.severity || 'info',
       timestamp: payload.timestamp || new Date().toISOString(),
-      workspace,
       ...payload
     };
 
     // Remove duplicate fields
     delete alertPayload.priority;
     delete alertPayload.body;
+    delete alertPayload.workspace; // Remove workspace - it's determined by API key
 
     try {
       const response = await this.client.post(`/alerts/${this.apiKey}`, alertPayload);
@@ -185,12 +176,7 @@ class SimpleA11ops {
   configure(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
-    }
-    if (options.workspace) {
-      this.workspaceKey = options.workspace;
-    }
-    if (options.apiKey || options.workspace) {
-      this._saveConfig(this.apiKey, this.workspaceKey);
+      this._saveConfig(this.apiKey);
     }
     return this;
   }
