@@ -1,0 +1,39 @@
+# Test files
+test/
+*.test.js
+jest.config.js
+coverage/
+
+# Examples (users can find these on GitHub)
+examples/
+
+# Development files
+.eslintrc.js
+.prettierrc
+.editorconfig
+/node_modules
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Misc
+.env
+.env.*
+TODO.md
+NOTES.md

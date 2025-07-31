@@ -1,0 +1,53 @@
+{
+  "name": "@a11ops/sdk",
+  "version": "1.0.0",
+  "description": "Official Node.js SDK for a11ops - Push notification infrastructure for critical alerts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/",
+    "prepublishOnly": "npm test && npm run lint",
+    "prepare": "npm run lint",
+    "version": "npm test && git add -A src",
+    "postversion": "git push && git push --tags",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
+    "dry-run": "npm publish --dry-run"
+  },
+  "keywords": [
+    "a11ops",
+    "alerts",
+    "monitoring",
+    "notifications",
+    "push-notifications",
+    "incident-response",
+    "on-call"
+  ],
+  "author": "a11ops",
+  "license": "MIT",
+  "homepage": "https://github.com/a11ops/sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a11ops/sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/a11ops/sdk/issues"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,58 @@
+# Serverless Framework configuration example
+# Shows how easy it is to use @a11ops/sdk in serverless environments
+
+service: my-serverless-app
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    # Just set your API key - that's it!
+    A11OPS_API_KEY: ${env:A11OPS_API_KEY}
+    A11OPS_DEFAULT_WORKSPACE: production
+
+functions:
+  processOrder:
+    handler: handler.processOrder
+    events:
+      - http:
+          path: /orders
+          method: post
+    environment:
+      FUNCTION_NAME: processOrder
+
+  scheduledTask:
+    handler: handler.scheduledTask
+    events:
+      - schedule: rate(1 hour)
+    environment:
+      FUNCTION_NAME: scheduledTask
+
+  errorMonitor:
+    handler: handler.errorMonitor
+    events:
+      - sns:
+          topicName: application-errors
+          displayName: Application Error Topic
+
+# handler.js example:
+# import { a11ops } from '@a11ops/sdk';
+# 
+# export async function processOrder(event) {
+#   try {
+#     const order = JSON.parse(event.body);
+#     // Process order...
+#     
+#     await a11ops.info({
+#       title: "Order Processed",
+#       message: `Order ${order.id} completed`,
+#       metadata: { orderId: order.id, amount: order.total }
+#     });
+#     
+#     return { statusCode: 200, body: JSON.stringify({ success: true }) };
+#   } catch (error) {
+#     await a11ops.error("Order Processing Failed", error.message);
+#     return { statusCode: 500, body: JSON.stringify({ error: 'Failed' }) };
+#   }
+# }
