@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-describe('Simple a11ops API', () => {
+describe('Simple A11ops API', () => {
   const configPath = path.join(os.homedir(), '.a11ops', 'config.json');
   
   beforeEach(() => {

@@ -1,10 +1,10 @@
-const a11ops = require('../src/index');
+const A11ops = require('../src/index');
 
-describe('a11ops SDK', () => {
+describe('A11ops SDK', () => {
   let client;
 
   beforeEach(() => {
-    client = new a11ops('test-api-key', {
+    client = new A11ops('test-api-key', {
       baseUrl: 'http://localhost:3000',
       retries: 1,
       retryDelay: 100
@@ -13,11 +13,11 @@ describe('a11ops SDK', () => {
 
   describe('Constructor', () => {
     test('throws error without API key', () => {
-      expect(() => new a11ops()).toThrow('API key is required');
+      expect(() => new A11ops()).toThrow('API key is required');
     });
 
     test('sets default options', () => {
-      const defaultClient = new a11ops('test-key');
+      const defaultClient = new A11ops('test-key');
       expect(defaultClient.baseUrl).toBe('https://api.a11ops.com');
       expect(defaultClient.region).toBe('auto');
       expect(defaultClient.timeout).toBe(30000);
@@ -25,7 +25,7 @@ describe('a11ops SDK', () => {
     });
 
     test('accepts custom options', () => {
-      const customClient = new a11ops('test-key', {
+      const customClient = new A11ops('test-key', {
         baseUrl: 'https://custom.api.com',
         region: 'eu-west-1',
         timeout: 10000,

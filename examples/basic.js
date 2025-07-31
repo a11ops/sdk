@@ -1,12 +1,12 @@
-const a11ops = require('../src/index');
+const A11ops = require('../src/index');
 
 // Initialize the client with your API key
-const a11ops = new a11ops('your-api-key-here');
+const client = new A11ops('your-api-key-here');
 
 async function sendBasicAlert() {
   try {
     // Send a simple alert
-    const result = await a11ops.alert({
+    const result = await client.alert({
       title: 'Server CPU High',
       message: 'CPU usage exceeded 90% on production server',
       severity: 'high'
@@ -21,7 +21,7 @@ async function sendBasicAlert() {
 async function sendCriticalAlert() {
   try {
     // Send a critical alert with custom fields
-    const result = await a11ops.alert({
+    const result = await client.alert({
       title: 'Database Connection Lost',
       message: 'Unable to connect to primary database cluster',
       severity: 'critical',
@@ -40,7 +40,7 @@ async function sendCriticalAlert() {
 async function sendBatchAlerts() {
   try {
     // Send multiple alerts at once
-    const results = await a11ops.batchAlert([
+    const results = await client.batchAlert([
       {
         title: 'Disk Space Warning',
         message: '/var/log is 85% full',
@@ -70,7 +70,7 @@ async function sendBatchAlerts() {
 async function checkMetrics() {
   try {
     // Get delivery metrics for the last 24 hours
-    const metrics = await a11ops.getMetrics({
+    const metrics = await client.getMetrics({
       period: '24h'
     });
     

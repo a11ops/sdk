@@ -1,4 +1,4 @@
-export interface a11opsOptions {
+export interface A11opsOptions {
   baseUrl?: string;
   region?: string;
   timeout?: number;
@@ -64,8 +64,8 @@ export interface SLACompliance {
   };
 }
 
-declare class a11ops {
-  constructor(apiKey: string, options?: a11opsOptions);
+declare class A11ops {
+  constructor(apiKey: string, options?: A11opsOptions);
   
   alert(payload: AlertPayload): Promise<any>;
   batchAlert(alerts: AlertPayload[]): Promise<any>;
@@ -102,4 +102,4 @@ export interface SimpleA11opsInstance {
 export const a11ops: SimpleA11opsInstance;
 
 // Default export is the class
-export default a11ops;
+export default A11ops;

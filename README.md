@@ -121,9 +121,9 @@ a11ops.configure({
 For more control, you can use the class-based API:
 
 ```javascript
-import a11ops from "@a11ops/sdk";
+import A11ops from "@a11ops/sdk";
 
-const client = new a11ops("your-api-key", {
+const client = new A11ops("your-api-key", {
   baseUrl: "https://api.a11ops.com",
   region: "us-west-2",
   timeout: 30000,

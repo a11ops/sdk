@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-class a11ops {
+class A11ops {
   constructor(apiKey, options = {}) {
     if (!apiKey) {
       throw new Error('API key is required');
@@ -136,11 +136,11 @@ class a11ops {
 }
 
 // Export the traditional class-based API
-module.exports = a11ops;
+module.exports = A11ops;
 
 // Also export the simple API
 const { a11ops } = require('./simple');
 module.exports.a11ops = a11ops;
 
 // For ES6 imports
-module.exports.default = a11ops;
+module.exports.default = A11ops;
