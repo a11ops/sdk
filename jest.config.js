@@ -10,5 +10,6 @@ module.exports = {
     '<rootDir>/test/**/*.test.js'
   ],
   moduleDirectories: ['node_modules', 'src'],
-  verbose: true
+  verbose: true,
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
 };

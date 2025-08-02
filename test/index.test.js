@@ -1,14 +1,34 @@
 const A11ops = require('../src/index');
+const axios = require('axios');
+
+// Mock axios
+jest.mock('axios');
 
 describe('A11ops SDK', () => {
   let client;
+  let mockAxiosInstance;
 
   beforeEach(() => {
+    // Create a mock axios instance that can be called as a function
+    mockAxiosInstance = jest.fn();
+    mockAxiosInstance.post = jest.fn();
+    mockAxiosInstance.get = jest.fn();
+    mockAxiosInstance.put = jest.fn();
+    mockAxiosInstance.delete = jest.fn();
+    mockAxiosInstance.request = jest.fn();
+    
+    // Mock axios.create to return our mock instance
+    axios.create.mockReturnValue(mockAxiosInstance);
+    
     client = new A11ops('test-api-key', {
       baseUrl: 'http://localhost:3000',
-      retries: 1,
-      retryDelay: 100
+      retries: 2,
+      retryDelay: 1
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('Constructor', () => {
@@ -145,9 +165,10 @@ describe('A11ops SDK', () => {
   describe('_request()', () => {
     test('retries on server errors', async () => {
       let attempts = 0;
-      jest.spyOn(client.client, 'request').mockImplementation(() => {
+      
+      mockAxiosInstance.mockImplementation(() => {
         attempts++;
-        if (attempts < 2) {
+        if (attempts < 2) {  // First attempt should fail
           const error = new Error('Server Error');
           error.response = { status: 500, data: { message: 'Internal Server Error' } };
           return Promise.reject(error);
@@ -164,7 +185,7 @@ describe('A11ops SDK', () => {
       const error = new Error('Bad Request');
       error.response = { status: 400, data: { message: 'Invalid payload' } };
       
-      jest.spyOn(client.client, 'request').mockRejectedValue(error);
+      mockAxiosInstance.mockRejectedValue(error);
 
       await expect(client._request('/test', {})).rejects.toThrow('Invalid payload');
     });
@@ -173,7 +194,7 @@ describe('A11ops SDK', () => {
       const error = new Error('Network Error');
       error.request = {};
       
-      jest.spyOn(client.client, 'request').mockRejectedValue(error);
+      mockAxiosInstance.mockRejectedValue(error);
 
       try {
         await client._request('/test', {});
