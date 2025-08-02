@@ -197,11 +197,36 @@ try {
 
 ## Local Development
 
-The SDK stores configuration in `~/.a11ops/config.json` after initial setup. To reset:
+The SDK stores configuration in `~/.a11ops/config.json` in your home directory (not your project directory) after initial setup. 
+
+### Security Notes
+
+- **Configuration location**: `~/.a11ops/config.json` is stored in your home directory, not your project
+- **API keys**: Never commit API keys to version control
+- **Environment variables**: Use `A11OPS_API_KEY` in production instead of config files
+- **CI/CD**: Always use environment variables, never config files
+
+### Reset Configuration
+
+To reset your local configuration:
 
 ```bash
 rm -rf ~/.a11ops
 ```
+
+### Best Practices
+
+1. **Development**: Use the interactive setup for local development
+2. **Production**: Always use environment variables:
+   ```bash
+   export A11OPS_API_KEY=your-api-key
+   ```
+3. **Version Control**: Add to `.gitignore` if you ever store keys in your project:
+   ```gitignore
+   # A11ops configuration
+   .a11ops/
+   *.a11ops.json
+   ```
 
 ## Support
 
