@@ -18,7 +18,7 @@ class A11ops {
       timeout: this.timeout,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': '@a11ops/sdk/1.1.1'
+        'User-Agent': '@a11ops/sdk/1.1.2'
       }
     });
   }

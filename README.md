@@ -111,7 +111,7 @@ import { a11ops } from "@a11ops/sdk";
 
 // Configure once in your app initialization
 a11ops.configure({
-  apiKey: "your-api-key" // Optional if set via env
+  apiKey: "your-api-key", // Optional if set via env
 });
 ```
 
@@ -197,7 +197,7 @@ try {
 
 ## Local Development
 
-The SDK stores configuration in `~/.a11ops/config.json` in your home directory (not your project directory) after initial setup. 
+The SDK stores configuration in `~/.a11ops/config.json` in your home directory (not your project directory) after initial setup.
 
 ### Security Notes
 
@@ -230,9 +230,9 @@ rm -rf ~/.a11ops
 
 ## Support
 
-- 📚 Documentation: [https://docs.a11ops.com](https://docs.a11ops.com)
+- 📚 Documentation: [https://a11ops.com/docs](https://a11ops.com/docs)
 - 🐛 Issues: [https://github.com/a11ops/sdk/issues](https://github.com/a11ops/sdk/issues)
-- 💬 Discord: [https://discord.gg/a11ops](https://discord.gg/a11ops)
+- 💬 Discord: [https://discord.gg/ywZvTAHT8N](https://discord.gg/ywZvTAHT8N)
 - 📧 Email: ali@a11ops.com
 
 ## License

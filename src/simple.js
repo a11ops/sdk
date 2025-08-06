@@ -17,7 +17,7 @@ class SimpleA11ops {
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': '@a11ops/sdk/1.1.1'
+        'User-Agent': '@a11ops/sdk/1.1.2'
       }
     });
   }
