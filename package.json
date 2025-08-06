@@ -1,6 +1,6 @@
 {
   "name": "@a11ops/sdk",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Official Node.js SDK for a11ops - Push notification infrastructure for critical alerts",
   "main": "src/index.js",
   "types": "src/index.d.ts",
