@@ -1,4 +1,5 @@
 const axios = require('axios');
+const A11opsLogMonitoring = require('./log-monitoring');
 
 class A11ops {
   constructor(apiKey, options = {}) {
@@ -12,15 +13,23 @@ class A11ops {
     this.timeout = options.timeout || 30000;
     this.retries = options.retries || 3;
     this.retryDelay = options.retryDelay || 1000;
+    this.environment = options.environment || 'production';
+    this.release = options.release;
+    this.options = options;
     
     this.client = axios.create({
       baseURL: this.baseUrl,
       timeout: this.timeout,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': '@a11ops/sdk/1.1.2'
+        'User-Agent': '@a11ops/sdk/1.2.0'
       }
     });
+
+    // Initialize log monitoring if enabled
+    if (options.logMonitoring !== false) {
+      this.logs = new A11opsLogMonitoring(this);
+    }
   }
 
   async alert(payload) {
@@ -131,6 +140,52 @@ class A11ops {
       return err;
     } else {
       return error;
+    }
+  }
+
+  // Convenience methods for log monitoring
+  captureError(error, options) {
+    if (!this.logs) {
+      throw new Error('Log monitoring not initialized');
+    }
+    return this.logs.captureError(error, options);
+  }
+
+  captureMessage(message, level, options) {
+    if (!this.logs) {
+      throw new Error('Log monitoring not initialized');
+    }
+    return this.logs.captureMessage(message, level, options);
+  }
+
+  captureLog(log, options) {
+    if (!this.logs) {
+      throw new Error('Log monitoring not initialized');
+    }
+    return this.logs.captureLog(log, options);
+  }
+
+  setUser(user) {
+    if (this.logs) {
+      this.logs.setUser(user);
+    }
+  }
+
+  setContext(key, value) {
+    if (this.logs) {
+      this.logs.setContext(key, value);
+    }
+  }
+
+  setTag(key, value) {
+    if (this.logs) {
+      this.logs.setTag(key, value);
+    }
+  }
+
+  addBreadcrumb(breadcrumb) {
+    if (this.logs) {
+      this.logs.addBreadcrumb(breadcrumb);
     }
   }
 }

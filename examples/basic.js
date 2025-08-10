@@ -1,12 +1,13 @@
-const A11ops = require('../src/index');
+import { a11ops } from '@a11ops/sdk';
 
-// Initialize the client with your API key
-const client = new A11ops('your-api-key-here');
+// Note: Set your API key as an environment variable:
+// export A11OPS_API_KEY='your-api-key-here'
+// Or pass it directly to each method call
 
 async function sendBasicAlert() {
   try {
     // Send a simple alert
-    const result = await client.alert({
+    const result = await a11ops.alert({
       title: 'Server CPU High',
       message: 'CPU usage exceeded 90% on production server',
       severity: 'high'
@@ -20,11 +21,10 @@ async function sendBasicAlert() {
 
 async function sendCriticalAlert() {
   try {
-    // Send a critical alert with custom fields
-    const result = await client.alert({
+    // Send a critical alert with custom fields using convenience method
+    const result = await a11ops.critical({
       title: 'Database Connection Lost',
       message: 'Unable to connect to primary database cluster',
-      severity: 'critical',
       server: 'db-primary-01',
       region: 'us-east-1',
       connectionAttempts: 5,
@@ -40,7 +40,7 @@ async function sendCriticalAlert() {
 async function sendBatchAlerts() {
   try {
     // Send multiple alerts at once
-    const results = await client.batchAlert([
+    const results = await a11ops.batchAlert([
       {
         title: 'Disk Space Warning',
         message: '/var/log is 85% full',
@@ -67,27 +67,36 @@ async function sendBatchAlerts() {
   }
 }
 
-async function checkMetrics() {
+async function sendVariousSeverities() {
   try {
-    // Get delivery metrics for the last 24 hours
-    const metrics = await client.getMetrics({
-      period: '24h'
+    // Using convenience methods for different severities
+    await a11ops.info({
+      title: 'Deployment Started',
+      message: 'Deploying version 2.0.1 to production'
     });
-    
-    console.log('Delivery Metrics:');
-    console.log(`- Total alerts: ${metrics.total}`);
-    console.log(`- Delivered: ${metrics.delivered}`);
-    console.log(`- Failed: ${metrics.failed}`);
-    console.log(`- Average latency: ${metrics.avgLatency}ms`);
-    console.log(`- P99 latency: ${metrics.p99Latency}ms`);
+
+    await a11ops.warning({
+      title: 'API Rate Limit Warning',
+      message: 'API rate limit at 80% capacity'
+    });
+
+    await a11ops.error({
+      title: 'Payment Processing Failed',
+      message: 'Failed to process payment for order #12345',
+      orderId: '12345',
+      amount: 99.99
+    });
+
+    console.log('Various severity alerts sent');
   } catch (error) {
-    console.error('Failed to get metrics:', error.message);
+    console.error('Failed to send alerts:', error.message);
   }
 }
 
 // Run examples
 async function runExamples() {
-  console.log('a11ops Node.js SDK Examples\n');
+  console.log('a11ops SDK Basic Examples\n');
+  console.log('=============================\n');
   
   console.log('1. Sending basic alert...');
   await sendBasicAlert();
@@ -98,18 +107,20 @@ async function runExamples() {
   console.log('\n3. Sending batch alerts...');
   await sendBatchAlerts();
   
-  console.log('\n4. Checking delivery metrics...');
-  await checkMetrics();
+  console.log('\n4. Sending various severity levels...');
+  await sendVariousSeverities();
+  
+  console.log('\n✅ All examples completed!');
 }
 
 // Run if called directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   runExamples().catch(console.error);
 }
 
-module.exports = {
+export {
   sendBasicAlert,
   sendCriticalAlert,
   sendBatchAlerts,
-  checkMetrics
+  sendVariousSeverities
 };

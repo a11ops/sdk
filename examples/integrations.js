@@ -1,5 +1,5 @@
-// Using the new simple API - no initialization required!
-const { a11ops } = require('@a11ops/sdk');
+// Using the simple API - no initialization required!
+import { a11ops } from '@a11ops/sdk';
 
 /**
  * Prometheus AlertManager Integration

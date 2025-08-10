@@ -4,6 +4,11 @@ export interface A11opsOptions {
   timeout?: number;
   retries?: number;
   retryDelay?: number;
+  environment?: string;
+  release?: string;
+  logMonitoring?: boolean;
+  autoCaptureErrors?: boolean;
+  autoBreadcrumbs?: boolean;
 }
 
 export interface AlertPayload {
@@ -64,6 +69,18 @@ export interface SLACompliance {
   };
 }
 
+export interface LogOptions {
+  level?: 'debug' | 'info' | 'warning' | 'error' | 'fatal' | 'critical';
+  fingerprint?: string;
+  environment?: string;
+  release?: string;
+  user?: any;
+  tags?: Record<string, any>;
+  extra?: Record<string, any>;
+}
+
+export type LogInput = Error | string | { message?: string; level?: string; [key: string]: any };
+
 declare class A11ops {
   constructor(apiKey: string, options?: A11opsOptions);
   
@@ -71,6 +88,22 @@ declare class A11ops {
   batchAlert(alerts: AlertPayload[]): Promise<any>;
   getMetrics(options?: MetricsOptions): Promise<DeliveryMetrics>;
   getSLACompliance(options?: SLAOptions): Promise<SLACompliance>;
+  
+  // Log monitoring methods
+  captureError(error: Error, options?: LogOptions): Promise<any>;
+  captureMessage(message: string, level?: string, options?: LogOptions): Promise<any>;
+  captureLog(log: LogInput, options?: LogOptions): Promise<any>;
+  
+  // Log monitoring instance (when logMonitoring is enabled)
+  logs?: {
+    captureError(error: Error, options?: LogOptions): Promise<any>;
+    captureMessage(message: string, level?: string, options?: LogOptions): Promise<any>;
+    captureLog(log: LogInput, options?: LogOptions): Promise<any>;
+    addBreadcrumb(breadcrumb: any): void;
+    setUser(user: any): void;
+    setContext(key: string, value: any): void;
+    setTag(key: string, value: any): void;
+  };
 }
 
 // Simple API types

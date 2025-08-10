@@ -195,6 +195,103 @@ try {
 }
 ```
 
+### Log Monitoring
+
+a11ops includes comprehensive log monitoring capabilities. Automatically capture and track errors with rich context, breadcrumbs, and user information.
+
+### Quick Start
+
+```javascript
+import A11ops from "@a11ops/sdk";
+
+const client = new A11ops("your-api-key", {
+  logMonitoring: true, // Enable log monitoring
+  environment: "production",
+  release: "1.0.0",
+});
+
+// Errors are now automatically captured!
+// Manual capture also available:
+client.captureError(new Error("Something went wrong"), {
+  level: "error",
+  tags: { module: "payment" },
+  user: { id: "123", email: "user@example.com" },
+});
+```
+
+### Automatic Error Capture
+
+```javascript
+// Browser: Automatically captures unhandled errors and promise rejections
+window.addEventListener("error", (e) => {
+  /* Handled automatically */
+});
+
+// Node.js: Automatically captures uncaught exceptions
+process.on("uncaughtException", (e) => {
+  /* Handled automatically */
+});
+```
+
+### Breadcrumbs & Context
+
+```javascript
+// Add breadcrumbs for debugging
+client.addBreadcrumb({
+  message: "User clicked checkout",
+  category: "user-action",
+  level: "info",
+});
+
+// Set user context
+client.setUser({
+  id: "user-123",
+  email: "user@example.com",
+  username: "johndoe",
+});
+
+// Set additional context
+client.setContext("subscription", {
+  plan: "enterprise",
+  seats: 50,
+});
+
+// Set tags for filtering
+client.setTag("release", "2.0.1");
+client.setTag("environment", "production");
+```
+
+### Express.js Error Tracking
+
+```javascript
+app.use((err, req, res, next) => {
+  // Capture error with request context
+  client.captureError(err, {
+    level: "error",
+    user: req.user,
+    extra: {
+      method: req.method,
+      url: req.url,
+      ip: req.ip,
+    },
+    tags: {
+      endpoint: `${req.method} ${req.path}`,
+    },
+  });
+
+  res.status(500).json({ error: "Internal Server Error" });
+});
+```
+
+### Capture Messages
+
+```javascript
+// Capture informational messages
+client.captureMessage("Payment processed successfully", "info", {
+  extra: { amount: 99.99, currency: "USD" },
+});
+```
+
 ## Local Development
 
 The SDK stores configuration in `~/.a11ops/config.json` in your home directory (not your project directory) after initial setup.

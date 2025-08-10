@@ -1,7 +1,7 @@
 {
   "name": "@a11ops/sdk",
-  "version": "1.1.2",
-  "description": "Official Node.js SDK for a11ops - Push notification infrastructure for critical alerts",
+  "version": "1.2.0",
+  "description": "Official Node.js SDK for a11ops - Push notification infrastructure for critical alerts with log monitoring",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "files": [
@@ -28,7 +28,11 @@
     "notifications",
     "push-notifications",
     "incident-response",
-    "on-call"
+    "on-call",
+    "log-monitoring",
+    "log-monitoring",
+    "debugging",
+    "observability"
   ],
   "author": "a11ops",
   "license": "MIT",
